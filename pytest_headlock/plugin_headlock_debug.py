@@ -116,6 +116,13 @@ class CMakeToolChain(ToolChainDriver):
 
     def __init__(self, base_toolchain):
         self.base_toolchain = base_toolchain
+        self.ADDITIONAL_COMPILE_OPTIONS = \
+            base_toolchain.ADDITIONAL_COMPILE_OPTIONS + \
+            self.ADDITIONAL_COMPILE_OPTIONS
+        self.ADDITIONAL_LINK_OPTIONS = \
+            base_toolchain.ADDITIONAL_LINK_OPTIONS + \
+            self.ADDITIONAL_LINK_OPTIONS
+        self.CLANG_TARGET = base_toolchain.CLANG_TARGET
 
     def sys_predef_macros(self):
         return self.base_toolchain.sys_predef_macros()
