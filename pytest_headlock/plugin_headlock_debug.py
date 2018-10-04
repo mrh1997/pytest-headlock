@@ -87,12 +87,12 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     global abs_markerfile, master_cmakelist, keep_failed
-    master_cmakelist = os.path.join(config.rootdir,
-                                    PYTEST_HEADLOCK_DIR, 'CMakeLists.txt')
-    if not os.path.exists(os.path.dirname(master_cmakelist)):
-        os.mkdir(os.path.dirname(master_cmakelist))
     keep_failed = config.option.KEEP_FAILED
     if not keep_failed:
+        master_cmakelist = os.path.join(config.rootdir,
+                                        PYTEST_HEADLOCK_DIR, 'CMakeLists.txt')
+        if not os.path.exists(os.path.dirname(master_cmakelist)):
+            os.mkdir(os.path.dirname(master_cmakelist))
         initialize()
 
 def pytest_runtest_setup(item):
