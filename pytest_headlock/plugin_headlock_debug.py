@@ -91,8 +91,13 @@ def pytest_configure(config):
     if not keep_failed:
         master_cmakelist = os.path.join(config.rootdir,
                                         PYTEST_HEADLOCK_DIR, 'CMakeLists.txt')
-        if not os.path.exists(os.path.dirname(master_cmakelist)):
-            os.mkdir(os.path.dirname(master_cmakelist))
+        master_cmakelist_dir = os.path.dirname(master_cmakelist)
+        if not os.path.exists(master_cmakelist_dir):
+            os.mkdir(master_cmakelist_dir)
+            gitignore_path = os.path.join(master_cmakelist_dir, '.gitignore')
+            with open(gitignore_path, 'wt') as gitignore:
+                gitignore.write('# created by pytest-headlock automatically, '
+                                'do not change\n*')
         initialize()
 
 def pytest_runtest_setup(item):
