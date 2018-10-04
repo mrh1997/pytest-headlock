@@ -12,15 +12,15 @@ from headlock.testsetup import CompileError, BuildError
 stop_testing = False
 
 
-def report_errors(exc):
-    root_path = Path(__file__).parent.parent
-    reslv_root_path = root_path.resolve()
+def report_errors(exc, rootdir):
+    resolved_rootdir = Path(rootdir).resolve()
     print()
     if isinstance(exc, CompileError):
         print('==== ERROR IN C SOURCE CODE ===================')
         for text, file, lineno in exc.errors:
             try:
-                out_file = root_path / Path(file).relative_to(reslv_root_path)
+                out_file = Path(rootdir) / \
+                           Path(file).relative_to(resolved_rootdir)
             except ValueError:
                 out_file = file
             print(f"{out_file}:{lineno}: {text}")
@@ -35,7 +35,7 @@ class TestSetupModule(pytest.Module):
         try:
             return super()._importtestmodule()
         except BuildError as exc:
-            report_errors(exc)
+            report_errors(exc, self.config.rootdir)
             pytest.exit(1)
 
 
@@ -48,7 +48,7 @@ def pytest_runtest_makereport(item, call):
     if call.excinfo is not None and isinstance(call.excinfo.value, BuildError):
         exc = call.excinfo.value
         stop_testing = True
-        report_errors(exc)
+        report_errors(exc, item.config.rootdir)
         firstlineno = 0 if not hasattr(item, 'function') \
                       else item.function.__code__.co_firstlineno
         return TestReport(item.nodeid, (item.fspath, firstlineno, str(exc)),
