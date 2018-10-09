@@ -28,10 +28,10 @@ class DummyToolChain(MinGW32ToolChain):
     def __init__(self):
         super().__init__(architecture='i686', exception_model='dwarf')
 
-    def exe_path(self, build_dir, name):
+    def exe_path(self, name, build_dir):
         return build_dir / '__headlock_dbg__.dll'
 
-    def build(self, transunits, build_dir, name):
+    def build(self, name, build_dir, transunits, req_libs, lib_dirs):
         pass
 
 
