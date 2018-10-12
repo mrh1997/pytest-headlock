@@ -208,13 +208,15 @@ class CMakeToolChain(ToolChainDriver):
             master_cmakelist_dir = master_cmakelist_path.parent.resolve()
             rel_build_dir = os.path.relpath(build_dir,str(master_cmakelist_dir))
             rel_build_dir_str = str(rel_build_dir).replace('\\', '/')
-            lines = master_cmakelist_path.open().readlines()
-            if len(lines) >= 4:
-                lastline = lines[-1]
-                if len(lastline) > 0 and lastline[0] != '#':
-                    with master_cmakelist_path.open('a') as cmfile:
-                        cmfile.write(
-                            f'add_subdirectory({rel_build_dir_str} {name})\n')
+            if master_cmakelist_path.exists():
+                lines = master_cmakelist_path.open().readlines()
+                if len(lines) >= 4:
+                    lastline = lines[-1]
+                    if len(lastline) > 0 and lastline[0] != '#':
+                        with master_cmakelist_path.open('a') as cmfile:
+                            cmfile.write(
+                                f'add_subdirectory('
+                                f'{rel_build_dir_str} {name})\n')
 
         self.base_toolchain.build(name, build_dir, transunits,
                                   req_libs, lib_dirs)
