@@ -1,3 +1,9 @@
+----
+
+**This repository was incorporated into [headlock]([https://github.com/mrh1997/headlock) and thus is no longer maintained**
+
+----
+
 # pytest-headlock
 Some pytest plugins and helper modules to simplify using headlock
 with pytest.
